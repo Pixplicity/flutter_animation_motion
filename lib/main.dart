@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animations/examples/simple_animation_controller_example.dart';
+import 'package:flutter_animations/examples/simple_color_tween_example.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Container(
         color: Colors.white,
-        child: SimpleAnimationControllerExample(),
+        child: SimpleColorTweenExample(),
       ),
     );
   }
