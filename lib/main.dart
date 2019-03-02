@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animations/examples/animatedpositioned_example.dart';
-import 'package:flutter_animations/examples/animatedwidget_opacity_example.dart';
-import 'package:flutter_animations/examples/decoratedbox_transition_example.dart';
-import 'package:flutter_animations/examples/hero_example.dart';
-import 'package:flutter_animations/examples/scale_transition_example.dart';
+import 'package:flutter_animations/examples/simple_animation_controller_example.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,7 +11,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ScaleTransitionExample(),
+      home: Container(
+        color: Colors.white,
+        child: SimpleAnimationControllerExample(),
+      ),
     );
   }
 }
