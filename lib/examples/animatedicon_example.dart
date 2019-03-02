@@ -23,22 +23,25 @@ class _AnimatedIconExampleState extends State<AnimatedIconExample>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _playForwardOrReverse,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          AnimatedIcon(
-            icon: AnimatedIcons.play_pause,
-            progress: _animation,
-            size: 100.0,
-            color: Colors.pink[400],
-          ),
-          AnimatedIcon(
-            icon: AnimatedIcons.menu_close,
-            progress: _animation,
-            size: 100.0,
-            color: Colors.pink[400],
-          ),
-        ],
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            AnimatedIcon(
+              icon: AnimatedIcons.play_pause,
+              progress: _animation,
+              size: 100.0,
+              color: Colors.pink[400],
+            ),
+            AnimatedIcon(
+              icon: AnimatedIcons.menu_close,
+              progress: _animation,
+              size: 100.0,
+              color: Colors.pink[400],
+            ),
+          ],
+        ),
       ),
     );
   }

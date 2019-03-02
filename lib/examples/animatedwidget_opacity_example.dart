@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 ///
 /// Animating the opacity of a Widget using AnimatedWidget
 ///
-class AnimatedFlutterLogoExample extends StatefulWidget {
+class AnimatedFlutterLogoOpacityExample extends StatefulWidget {
   @override
-  _AnimatedFlutterLogoExampleState createState() =>
-      _AnimatedFlutterLogoExampleState();
+  _AnimatedFlutterLogoOpacityExampleState createState() =>
+      _AnimatedFlutterLogoOpacityExampleState();
 }
 
-class _AnimatedFlutterLogoExampleState extends State<AnimatedFlutterLogoExample>
+class _AnimatedFlutterLogoOpacityExampleState
+    extends State<AnimatedFlutterLogoOpacityExample>
     with TickerProviderStateMixin {
   AnimationController _controller;
   Animation<double> _animation;

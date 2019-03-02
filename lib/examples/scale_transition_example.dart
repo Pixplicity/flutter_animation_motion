@@ -29,11 +29,13 @@ class _ScaleTransitionExampleState extends State<ScaleTransitionExample>
 
   @override
   Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: _animation,
-      child: Icon(
-        Icons.favorite,
-        color: Colors.pink[400],
+    return Center(
+      child: ScaleTransition(
+        scale: _animation,
+        child: Icon(
+          Icons.favorite,
+          color: Colors.pink[400],
+        ),
       ),
     );
   }
