@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animations/examples/animated_container_example.dart';
+import 'package:flutter_animations/examples/animated_default_textstyle_example.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: AnimatedContainerExample(),
+      home: AnimatedDefaultTextStyleExample(),
     );
   }
 }
