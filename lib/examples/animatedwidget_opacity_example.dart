@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+///
+/// Animating the opacity of a Widget using AnimatedWidget
+///
 class AnimatedFlutterLogoExample extends StatefulWidget {
   @override
   _AnimatedFlutterLogoExampleState createState() =>

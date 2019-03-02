@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+///
+/// Hero transition example using a Hero widget
+///
 class HeroExampleMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+///
+/// Animating changes in container's properties using AnimatedContainer
+///
 class AnimatedContainerExample extends StatefulWidget {
   @override
   _AnimatedContainerExampleState createState() =>

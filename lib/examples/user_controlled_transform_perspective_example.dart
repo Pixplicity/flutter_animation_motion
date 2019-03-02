@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+///
+/// Transform a widget with a perspective, controlled by user's gestures
+///
 class UserControlledTransformPerspectiveExample extends StatefulWidget {
   @override
   _UserControlledTransformPerspectiveExampleState createState() =>

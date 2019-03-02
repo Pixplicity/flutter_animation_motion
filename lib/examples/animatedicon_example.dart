@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+///
+/// Animating an Icon using AnimatedIcon
+///
 class AnimatedIconExample extends StatefulWidget {
   @override
   _AnimatedIconExampleState createState() => _AnimatedIconExampleState();

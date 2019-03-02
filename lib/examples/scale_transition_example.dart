@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+///
+/// Animating a widget's scale using ScaleTransition.
+///
 class ScaleTransitionExample extends StatefulWidget {
   @override
   _ScaleTransitionExampleState createState() => _ScaleTransitionExampleState();

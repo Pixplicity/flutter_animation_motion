@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+///
+/// Animating the position of a Widget using AnimatedPositioned
+///
 class AnimatedPositionedExample extends StatefulWidget {
   @override
   _AnimatedPositionedExampleState createState() =>

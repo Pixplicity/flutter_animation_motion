@@ -2,6 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+///
+/// Rotation of a widget using Transform widget, animated by an AnimatedBuilder with an elastic curve.
+///
 class AnimatedBuilderRotationExample extends StatefulWidget {
   @override
   _AnimatedBuilderRotationExampleState createState() =>

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+///
+/// Animating a DecoratedBox' gradient colors using DecoratedBoxTransition
+///
 class DecoratedBoxTransitionExample extends StatefulWidget {
   @override
   _DecoratedBoxTransitionExampleState createState() =>

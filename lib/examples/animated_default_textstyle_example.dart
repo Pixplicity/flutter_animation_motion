@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+///
+/// Animating changes in Text's TextStyle using AnimatedDefaultTextStyle
+///
 class AnimatedDefaultTextStyleExample extends StatefulWidget {
   @override
   _AnimatedDefaultTextStyleExampleState createState() =>
