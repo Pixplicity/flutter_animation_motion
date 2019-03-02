@@ -162,7 +162,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.didChangeDependencies();
     viewModels = [
       ExampleViewModel(
-        "Displaying controller's animated value on screen",
+        "Displaying controller's animated value",
         "Slide 6-9",
         () => _navigateTo(SimpleAnimationControllerExample()),
       ),
@@ -192,7 +192,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         () => _navigateTo(DecoratedBoxTransitionExample()),
       ),
       ExampleViewModel(
-        "Animating a widget's scale using ScaleTransition",
+        "Animating a widget's scale",
         "Slide 24-25",
         () => _navigateTo(ScaleTransitionExample()),
       ),
@@ -207,7 +207,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         () => _navigateTo(HeroExampleMain()),
       ),
       ExampleViewModel(
-        "Animated rotation of a widget using AnimatedBuilder",
+        "Animated rotation of a widget",
         "Slide 29-33",
         () => _navigateTo(AnimatedBuilderRotationExample()),
       ),
