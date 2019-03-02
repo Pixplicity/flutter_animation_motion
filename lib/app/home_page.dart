@@ -294,6 +294,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Image.asset(
               "assets/images/profile_cover.jpeg",
               fit: BoxFit.cover,
+              width: MediaQuery.of(context).size.width,
+              height: 105.0,
             ),
             BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
