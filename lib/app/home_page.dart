@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         parent: _mainController,
         curve: Interval(
           0.100,
-          0.400,
+          0.600,
           curve: Curves.elasticOut,
         ),
       ),
