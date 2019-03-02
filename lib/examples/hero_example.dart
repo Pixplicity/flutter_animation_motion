@@ -7,7 +7,7 @@ class HeroExampleMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white30,
+      backgroundColor: Colors.pink[200],
       body: Container(
         padding: EdgeInsets.all(16.0),
         alignment: Alignment.bottomRight,
@@ -32,6 +32,7 @@ class HeroExampleDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Details")),
       body: Container(
         alignment: Alignment.topCenter,
         child: Hero(
