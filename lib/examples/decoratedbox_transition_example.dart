@@ -10,9 +10,7 @@ class _DecoratedBoxTransitionExampleState
     extends State<DecoratedBoxTransitionExample>
     with SingleTickerProviderStateMixin {
   DecorationTween _tween;
-
   AnimationController _animationController;
-
   Animation<Decoration> _animation;
 
   @override
@@ -63,5 +61,11 @@ class _DecoratedBoxTransitionExampleState
     } else {
       _animationController.forward();
     }
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 }

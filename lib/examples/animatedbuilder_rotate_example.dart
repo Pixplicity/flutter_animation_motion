@@ -11,17 +11,17 @@ class AnimatedBuilderRotationExample extends StatefulWidget {
 class _AnimatedBuilderRotationExampleState
     extends State<AnimatedBuilderRotationExample>
     with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  Animation animation;
+  AnimationController _controller;
+  Animation _animation;
 
   @override
   initState() {
     super.initState();
-    controller =
+    _controller =
         AnimationController(duration: Duration(seconds: 3), vsync: this);
-    animation = Tween(begin: 0.0, end: (360.0 * pi / 180) * 2).animate(
-        CurvedAnimation(parent: controller, curve: Curves.elasticInOut));
-    controller.forward();
+    _animation = Tween(begin: 0.0, end: (360.0 * pi / 180) * 2).animate(
+        CurvedAnimation(parent: _controller, curve: Curves.elasticInOut));
+    _controller.forward();
   }
 
   @override
@@ -32,23 +32,29 @@ class _AnimatedBuilderRotationExampleState
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           AnimatedBuilder(
-            animation: controller,
+            animation: _controller,
             builder: (BuildContext context, Widget child) => Transform.rotate(
-                  angle: animation.value,
+                  angle: _animation.value,
                   child: child,
                 ),
             child: FlutterLogo(size: 300),
           ),
           SizedBox(height: 50),
           AnimatedBuilder(
-            animation: controller,
+            animation: _controller,
             builder: (BuildContext context, Widget child) => Text(
-                  ((animation.value * 180 / pi) % 360).toString(),
+                  ((_animation.value * 180 / pi) % 360).toString(),
                   style: Theme.of(context).textTheme.title,
                 ),
           ),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

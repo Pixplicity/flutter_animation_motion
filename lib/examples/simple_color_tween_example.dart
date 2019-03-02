@@ -38,4 +38,10 @@ class _SimpleColorTweenExampleState extends State<SimpleColorTweenExample>
       height: double.infinity,
     );
   }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 }

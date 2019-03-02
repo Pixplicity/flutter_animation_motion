@@ -8,30 +8,36 @@ class AnimatedFlutterLogoExample extends StatefulWidget {
 
 class _AnimatedFlutterLogoExampleState extends State<AnimatedFlutterLogoExample>
     with TickerProviderStateMixin {
-  AnimationController controller;
-  Animation<double> animation;
+  AnimationController _controller;
+  Animation<double> _animation;
 
   @override
   initState() {
     super.initState();
-    controller = AnimationController(
+    _controller = AnimationController(
         duration: const Duration(milliseconds: 2000), vsync: this);
-    animation = CurvedAnimation(parent: controller, curve: Curves.easeIn);
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
 
-    animation.addStatusListener((status) {
+    _animation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        controller.reverse();
+        _controller.reverse();
       } else if (status == AnimationStatus.dismissed) {
-        controller.forward();
+        _controller.forward();
       }
     });
 
-    controller.forward();
+    _controller.forward();
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedFlutterLogo(animation: controller);
+    return AnimatedFlutterLogo(animation: _controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
 

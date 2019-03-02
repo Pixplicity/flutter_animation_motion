@@ -47,4 +47,10 @@ class _AnimatedIconExampleState extends State<AnimatedIconExample>
       _animation.forward();
     }
   }
+
+  @override
+  void dispose() {
+    _animation.dispose();
+    super.dispose();
+  }
 }
