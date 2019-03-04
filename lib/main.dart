@@ -64,10 +64,7 @@ class _UserControlledTransformPerspectiveExampleState
       );
     } else {
       return GestureDetector(
-        onLongPress: () => setState(() {
-              _enabled = !_enabled;
-              _offset = Offset.zero;
-            }),
+        onLongPress: () => setState(() => _enabled = !_enabled),
         child: widget.child,
       );
     }
