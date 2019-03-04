@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Animation<Decoration> _backgroundDecoration;
   Animation<double> _avatarSize;
   Animation<double> _nameOpacity;
-  Animation<double> _occupationOpacity;
+  Animation<double> _titleOpacity;
   Animation<double> _dividerWidth;
   Animation<double> _listItemHeightFactor;
   Animation<double> _flipButtonWidth;
@@ -107,7 +107,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
     );
 
-    _occupationOpacity = Tween(begin: 0.0, end: 0.85).animate(
+    _titleOpacity = Tween(begin: 0.0, end: 0.85).animate(
       CurvedAnimation(
         parent: _mainController,
         curve: Interval(
@@ -173,57 +173,57 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
       ExampleViewModel(
         "Animating Container's properties",
-        "Slide 19",
+        "Slide 21",
         () => _navigateTo(AnimatedContainerExample()),
       ),
       ExampleViewModel(
         "Animating the position of a Widget",
-        "Slide 20",
+        "Slide 22",
         () => _navigateTo(AnimatedPositionedExample()),
       ),
       ExampleViewModel(
         "Animating an Icon using AnimatedIcon",
-        "Slide 21",
+        "Slide 23",
         () => _navigateTo(AnimatedIconExample()),
       ),
       ExampleViewModel(
         "Animating a gradient background",
-        "Slide 22-23",
+        "Slide 24-25",
         () => _navigateTo(DecoratedBoxTransitionExample()),
       ),
       ExampleViewModel(
         "Animating a widget's scale",
-        "Slide 24-25",
+        "Slide 26-27",
         () => _navigateTo(ScaleTransitionExample()),
       ),
       ExampleViewModel(
         "Animating changes in TextStyle",
-        "Slide 26",
+        "Slide 28",
         () => _navigateTo(AnimatedDefaultTextStyleExample()),
       ),
       ExampleViewModel(
         "Shared element transition using Hero widget",
-        "Slide 27-28",
+        "Slide 29-30",
         () => _navigateTo(HeroExampleMain()),
       ),
       ExampleViewModel(
+        "Change perspective of a Widget",
+        "Slide 31",
+        () => _navigateTo(StaticTransformPerspectiveExample()),
+      ),
+      ExampleViewModel(
         "Animated rotation of a widget",
-        "Slide 29-33",
+        "Slide 32-33",
         () => _navigateTo(AnimatedBuilderRotationExample()),
       ),
       ExampleViewModel(
         "Animating the opacity of a Widget",
-        "Slide 34",
+        "Slide 37",
         () => _navigateTo(AnimatedFlutterLogoOpacityExample()),
       ),
       ExampleViewModel(
-        "Change perspective of a Widget",
-        "Slide 35",
-        () => _navigateTo(StaticTransformPerspectiveExample()),
-      ),
-      ExampleViewModel(
         "Change of Widget's perspective with gestures",
-        "(not in the presentation)",
+        "Slide 38 (hidden)",
         () => _navigateTo(UserControlledTransformPerspectiveExample()),
       ),
     ];
@@ -343,7 +343,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Text(
               "Animation and motion in Flutter (2019)",
               style: TextStyle(
-                color: Colors.white.withOpacity(_occupationOpacity.value),
+                color: Colors.white.withOpacity(_titleOpacity.value),
                 fontWeight: FontWeight.w500,
               ),
             ),
