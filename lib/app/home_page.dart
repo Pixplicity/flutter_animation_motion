@@ -1,9 +1,11 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animations/app/examples_list.dart';
 import 'package:flutter_animations/app/flip_inherited_widget.dart';
 import 'package:flutter_animations/app/model/slide_example_viewmodel.dart';
+import 'package:flutter_animations/app/profile_cover.dart';
+import 'package:flutter_animations/app/profile_info.dart';
 import 'package:flutter_animations/examples/animated_container_example.dart';
 import 'package:flutter_animations/examples/animated_default_textstyle_example.dart';
 import 'package:flutter_animations/examples/animatedbuilder_rotate_example.dart';
@@ -169,20 +171,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return FlipInherited(
       child: Scaffold(
-        floatingActionButton: Builder(builder: (BuildContext ctx) {
-          return MyFloatingActionButton(
-              animation: _flipCardController,
-              onTap: () {
-                final flipInherited = FlipInherited.of(ctx);
-                final willBeFlipped = !flipInherited.isFlipped;
-                flipInherited.flip(willBeFlipped);
-                if (willBeFlipped) {
-                  _flipCardController.forward();
-                } else {
-                  _flipCardController.reverse();
-                }
-              });
-        }),
+        floatingActionButton: Builder(
+            builder: (BuildContext ctx) => MyFloatingActionButton(
+                animation: _flipCardController, onTap: () => _flipList(ctx))),
         body: AnimatedBuilder(
           animation: _mainController,
           builder: (BuildContext context, Widget child) => Container(
@@ -208,191 +199,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
         ],
       );
-}
 
-class ProfileCover extends StatelessWidget {
-  final Animation animation;
-
-  const ProfileCover({Key key, this.animation}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 150.0,
-      child: Stack(
-        children: <Widget>[
-          Image.asset(
-            "assets/images/profile_cover.jpeg",
-            fit: BoxFit.cover,
-            width: MediaQuery.of(context).size.width,
-            height: 105.0,
-          ),
-          BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-            child: Avatar(animation: animation),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class Avatar extends AnimatedWidget {
-  final Animation<double> animation;
-
-  Avatar({Key key, this.animation})
-      : super(
-            key: key,
-            listenable: Tween(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                parent: animation,
-                curve: Interval(
-                  0.100,
-                  0.600,
-                  curve: Curves.elasticOut,
-                ),
-              ),
-            ));
-
-  @override
-  Widget build(BuildContext context) {
-    return Transform(
-      transform: Matrix4.diagonal3Values(
-        (listenable as Animation).value,
-        (listenable as Animation).value,
-        1.0,
-      ),
-      alignment: Alignment.center,
-      child: Container(
-        width: 110.0,
-        height: 110.0,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.white30),
-        ),
-        margin: const EdgeInsets.only(top: 32.0, left: 16.0),
-        padding: const EdgeInsets.all(3.0),
-        child: ClipOval(
-          child: Image.asset("assets/images/profile_picture.jpeg"),
-        ),
-      ),
-    );
-  }
-}
-
-class ProfileInfo extends StatelessWidget {
-  final Animation animation;
-
-  ProfileInfo({Key key, this.animation});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          AnimatedName(
-            animation: animation,
-            name: "Stefan Mitev",
-          ),
-          AnimatedTitle(
-            animation: animation,
-            title: "Animation and motion in Flutter (2019)",
-          ),
-          AnimatedDivider(animation: animation),
-        ],
-      ),
-    );
-  }
-}
-
-class AnimatedName extends AnimatedWidget {
-  final AnimationController animation;
-  final String name;
-
-  AnimatedName({Key key, this.name, this.animation})
-      : super(
-            key: key,
-            listenable: Tween(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                parent: animation,
-                curve: Interval(
-                  0.350,
-                  0.450,
-                  curve: Curves.easeIn,
-                ),
-              ),
-            ));
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      name,
-      style: TextStyle(
-        color: Colors.white.withOpacity((listenable as Animation).value),
-        fontWeight: FontWeight.bold,
-        fontSize: 30.0,
-      ),
-    );
-  }
-}
-
-class AnimatedTitle extends AnimatedWidget {
-  final AnimationController animation;
-  final String title;
-
-  AnimatedTitle({Key key, this.title, this.animation})
-      : super(
-            key: key,
-            listenable: Tween(begin: 0.0, end: 0.85).animate(
-              CurvedAnimation(
-                parent: animation,
-                curve: Interval(
-                  0.500,
-                  0.600,
-                  curve: Curves.easeIn,
-                ),
-              ),
-            ));
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: TextStyle(
-        color: Colors.white.withOpacity((listenable as Animation).value),
-        fontWeight: FontWeight.w500,
-      ),
-    );
-  }
-}
-
-class AnimatedDivider extends AnimatedWidget {
-  final AnimationController animation;
-
-  AnimatedDivider({Key key, this.animation})
-      : super(
-            key: key,
-            listenable: Tween(begin: 0.0, end: 325.0).animate(
-              CurvedAnimation(
-                parent: animation,
-                curve: Interval(
-                  0.500,
-                  0.600,
-                  curve: Curves.fastOutSlowIn,
-                ),
-              ),
-            ));
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white.withOpacity(0.85),
-      margin: const EdgeInsets.symmetric(vertical: 16.0),
-      width: (listenable as Animation).value,
-      height: 1.0,
-    );
+  void _flipList(BuildContext context) {
+    final flipInherited = FlipInherited.of(context);
+    final willBeFlipped = !flipInherited.isFlipped;
+    flipInherited.flip(willBeFlipped);
+    if (willBeFlipped) {
+      _flipCardController.forward();
+    } else {
+      _flipCardController.reverse();
+    }
   }
 }
 
@@ -435,177 +251,6 @@ class _MyFloatingActionButtonState extends State<MyFloatingActionButton> {
           icon: Icon(Icons.repeat),
           label: Text(
               flipInherited.isFlipped ? "Example titles" : "Slide titles")),
-    );
-  }
-}
-
-class ExamplesList extends StatelessWidget {
-  final List<ExampleViewModel> viewModels;
-  final Animation itemAnimation;
-  final Animation flipAnimation;
-
-  ExamplesList(
-      {Key key, this.viewModels, this.itemAnimation, this.flipAnimation})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        padding: EdgeInsets.only(bottom: 16.0),
-        itemCount: viewModels.length,
-        itemBuilder: (BuildContext context, int index) => ExampleListTile(
-              viewModel: viewModels[index],
-              itemAnimation: itemAnimation,
-              flipAnimation: flipAnimation,
-            ),
-      ),
-    );
-  }
-}
-
-class ExampleListTile extends StatefulWidget {
-  final ExampleViewModel viewModel;
-  final Animation itemAnimation;
-  final Animation flipAnimation;
-
-  ExampleListTile({
-    Key key,
-    this.viewModel,
-    this.itemAnimation,
-    this.flipAnimation,
-  }) : super(key: key);
-
-  @override
-  _ExampleListTileState createState() => _ExampleListTileState();
-}
-
-class _ExampleListTileState extends State<ExampleListTile> {
-  Animation<double> _heightFactor;
-  Animation<double> _frontCardTransformation;
-  Animation<double> _backCardTransformation;
-
-  @override
-  void initState() {
-    super.initState();
-    _heightFactor = Tween(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: widget.itemAnimation,
-        curve: Interval(
-          0.550,
-          0.650,
-          curve: Curves.fastOutSlowIn,
-        ),
-      ),
-    );
-
-    _frontCardTransformation = Tween(begin: 0.0, end: pi / 2).animate(
-        // (pi / 2) * 4
-        CurvedAnimation(
-            parent: widget.flipAnimation,
-            curve: Interval(0.0, 0.5, curve: Curves.easeOut)));
-
-    _backCardTransformation = Tween(begin: 3.0, end: 0.0).animate(
-        CurvedAnimation(
-            parent: widget.flipAnimation,
-            curve: Interval(0.3, 1.0, curve: Curves.easeOut)));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _heightFactor,
-      builder: (BuildContext context, Widget child) {
-        return ClipRect(
-          child: Align(
-            alignment: Alignment.topLeft,
-            heightFactor: max(_heightFactor.value, 0.0),
-            widthFactor: 1.0,
-            child: GestureDetector(
-              onTap: widget.viewModel.onTap,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Stack(
-                  children: <Widget>[
-                    _BackCard(
-                      animation: _backCardTransformation,
-                      viewModel: widget.viewModel,
-                    ),
-                    _FrontCard(
-                      animation: _frontCardTransformation,
-                      viewModel: widget.viewModel,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _BackCard extends StatelessWidget {
-  final Animation animation;
-  final ExampleViewModel viewModel;
-
-  const _BackCard({Key key, this.animation, this.viewModel}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final flipInherited = FlipInherited.of(context);
-
-    return AnimatedBuilder(
-      animation: animation,
-      builder: (BuildContext context, Widget child) {
-        return Transform(
-            transform: Matrix4.identity()
-              ..setEntry(3, 2, 0.001)
-              ..rotateX(
-                  flipInherited.isFlipped ? animation.value : -animation.value),
-            child: child);
-      },
-      child: Card(
-        elevation: !flipInherited.isFlipped ? 0.0 : 2.0,
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16.0),
-          child: Text(viewModel.backTitle),
-        ),
-      ),
-    );
-  }
-}
-
-class _FrontCard extends StatelessWidget {
-  final Animation animation;
-  final ExampleViewModel viewModel;
-
-  const _FrontCard({Key key, this.animation, this.viewModel}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final flipInherited = FlipInherited.of(context);
-
-    return AnimatedBuilder(
-      animation: animation,
-      builder: (BuildContext context, Widget child) {
-        return Transform(
-            transform: Matrix4.identity()
-              ..setEntry(3, 2, 0.001)
-              ..rotateX(
-                  flipInherited.isFlipped ? -animation.value : animation.value),
-            child: child);
-      },
-      child: Card(
-        elevation: flipInherited.isFlipped ? 0.0 : 2.0,
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16.0),
-          child: Text(viewModel.title),
-        ),
-      ),
     );
   }
 }
