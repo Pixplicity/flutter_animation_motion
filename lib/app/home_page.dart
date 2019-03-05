@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animations/app/flip_inherited_widget.dart';
 import 'package:flutter_animations/app/model/slide_example_viewmodel.dart';
 import 'package:flutter_animations/examples/animated_container_example.dart';
 import 'package:flutter_animations/examples/animated_default_textstyle_example.dart';
@@ -25,16 +26,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   AnimationController _mainController;
   AnimationController _flipCardController;
-
   Animation<Decoration> _backgroundDecoration;
-  Animation<double> _listItemHeightFactor;
-  Animation<double> _frontCardTransformation;
-  Animation<double> _backCardTransformation;
 
   List<ExampleViewModel> viewModels;
-
-  // TODO: Extract to a InheritedWidget
-  var _isFlipped = false;
 
   @override
   void initState() {
@@ -80,28 +74,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
       ),
     );
-
-    _listItemHeightFactor = Tween(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _mainController,
-        curve: Interval(
-          0.550,
-          0.650,
-          curve: Curves.fastOutSlowIn,
-        ),
-      ),
-    );
-
-    _frontCardTransformation = Tween(begin: 0.0, end: pi / 2).animate(
-        // (pi / 2) * 4
-        CurvedAnimation(
-            parent: _flipCardController,
-            curve: Interval(0.0, 0.5, curve: Curves.easeOut)));
-
-    _backCardTransformation = Tween(begin: 3.0, end: 0.0).animate(
-        CurvedAnimation(
-            parent: _flipCardController,
-            curve: Interval(0.3, 1.0, curve: Curves.easeOut)));
 
     _mainController.forward();
   }
@@ -195,24 +167,30 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: MyFloatingActionButton(
-        animation: _flipCardController,
-        onTap: () {
-          _isFlipped = !_isFlipped;
-          if (_isFlipped) {
-            _flipCardController.forward();
-          } else {
-            _flipCardController.reverse();
-          }
-        },
-      ),
-      body: AnimatedBuilder(
-        animation: _mainController,
-        builder: (BuildContext context, Widget child) => Container(
-              decoration: _backgroundDecoration.value,
-              child: _buildContent(),
-            ),
+    return FlipInherited(
+      child: Scaffold(
+        floatingActionButton: Builder(builder: (BuildContext ctx) {
+          return MyFloatingActionButton(
+              animation: _flipCardController,
+              onTap: () {
+                final flipInherited = FlipInherited.of(ctx);
+                final willBeFlipped = !flipInherited.isFlipped;
+                flipInherited.flip(willBeFlipped);
+                if (willBeFlipped) {
+                  _flipCardController.forward();
+                } else {
+                  _flipCardController.reverse();
+                }
+              });
+        }),
+        body: AnimatedBuilder(
+          animation: _mainController,
+          builder: (BuildContext context, Widget child) => Container(
+                decoration: _backgroundDecoration.value,
+                child: child,
+              ),
+          child: _buildContent(),
+        ),
       ),
     );
   }
@@ -223,80 +201,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         children: <Widget>[
           ProfileCover(animation: _mainController),
           ProfileInfo(animation: _mainController),
-          _buildList(),
+          ExamplesList(
+            viewModels: viewModels,
+            itemAnimation: _mainController,
+            flipAnimation: _flipCardController,
+          ),
         ],
-      );
-
-  Widget _buildList() => Expanded(
-        child: ListView.builder(
-          padding: EdgeInsets.only(bottom: 16.0),
-          itemCount: viewModels.length,
-          itemBuilder: (BuildContext context, int index) =>
-              _buildListTile(index),
-        ),
-      );
-
-  ClipRect _buildListTile(int index) => ClipRect(
-        child: Align(
-          alignment: Alignment.topLeft,
-          heightFactor: max(_listItemHeightFactor.value, 0.0),
-          widthFactor: 1.0,
-          child: GestureDetector(
-            onTap: viewModels[index].onTap,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Stack(
-                children: <Widget>[
-                  _buildBackCard(viewModels[index]),
-                  _buildFrontCard(viewModels[index]),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-
-  AnimatedBuilder _buildFrontCard(ExampleViewModel viewModel) =>
-      AnimatedBuilder(
-        animation: _frontCardTransformation,
-        builder: (BuildContext context, Widget child) {
-          return Transform(
-              transform: Matrix4.identity()
-                ..setEntry(3, 2, 0.001)
-                ..rotateX(_isFlipped
-                    ? -_frontCardTransformation.value
-                    : _frontCardTransformation.value),
-              child: child);
-        },
-        child: Card(
-          elevation: _isFlipped ? 0.0 : 2.0,
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16.0),
-            child: Text(viewModel.title),
-          ),
-        ),
-      );
-
-  AnimatedBuilder _buildBackCard(ExampleViewModel viewModel) => AnimatedBuilder(
-        animation: _backCardTransformation,
-        builder: (BuildContext context, Widget child) {
-          return Transform(
-              transform: Matrix4.identity()
-                ..setEntry(3, 2, 0.001)
-                ..rotateX(_isFlipped
-                    ? _backCardTransformation.value
-                    : -_backCardTransformation.value),
-              child: child);
-        },
-        child: Card(
-          elevation: !_isFlipped ? 0.0 : 2.0,
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16.0),
-            child: Text(viewModel.backTitle),
-          ),
-        ),
       );
 }
 
@@ -319,7 +229,7 @@ class ProfileCover extends StatelessWidget {
           ),
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-            child: Avatar(controller: animation),
+            child: Avatar(animation: animation),
           )
         ],
       ),
@@ -328,14 +238,14 @@ class ProfileCover extends StatelessWidget {
 }
 
 class Avatar extends AnimatedWidget {
-  final AnimationController controller;
+  final Animation<double> animation;
 
-  Avatar({Key key, this.controller})
+  Avatar({Key key, this.animation})
       : super(
             key: key,
             listenable: Tween(begin: 0.0, end: 1.0).animate(
               CurvedAnimation(
-                parent: controller,
+                parent: animation,
                 curve: Interval(
                   0.100,
                   0.600,
@@ -499,8 +409,6 @@ class MyFloatingActionButton extends StatefulWidget {
 
 class _MyFloatingActionButtonState extends State<MyFloatingActionButton> {
   Animation<double> _flipButtonWidth;
-  // TODO: Use an InheritedWidget
-  var _isFlipped = false;
 
   @override
   void initState() {
@@ -511,6 +419,8 @@ class _MyFloatingActionButtonState extends State<MyFloatingActionButton> {
 
   @override
   Widget build(BuildContext context) {
+    final flipInherited = FlipInherited.of(context);
+
     return AnimatedBuilder(
       animation: _flipButtonWidth,
       builder: (BuildContext context, Widget child) => Container(
@@ -519,11 +429,183 @@ class _MyFloatingActionButtonState extends State<MyFloatingActionButton> {
           ),
       child: FloatingActionButton.extended(
           onPressed: () => setState(() {
-                _isFlipped = !_isFlipped;
+                flipInherited.flip(flipInherited.isFlipped);
                 widget.onTap();
               }),
           icon: Icon(Icons.repeat),
-          label: Text(_isFlipped ? "Example titles" : "Slide titles")),
+          label: Text(
+              flipInherited.isFlipped ? "Example titles" : "Slide titles")),
+    );
+  }
+}
+
+class ExamplesList extends StatelessWidget {
+  final List<ExampleViewModel> viewModels;
+  final Animation itemAnimation;
+  final Animation flipAnimation;
+
+  ExamplesList(
+      {Key key, this.viewModels, this.itemAnimation, this.flipAnimation})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView.builder(
+        padding: EdgeInsets.only(bottom: 16.0),
+        itemCount: viewModels.length,
+        itemBuilder: (BuildContext context, int index) => ExampleListTile(
+              viewModel: viewModels[index],
+              itemAnimation: itemAnimation,
+              flipAnimation: flipAnimation,
+            ),
+      ),
+    );
+  }
+}
+
+class ExampleListTile extends StatefulWidget {
+  final ExampleViewModel viewModel;
+  final Animation itemAnimation;
+  final Animation flipAnimation;
+
+  ExampleListTile({
+    Key key,
+    this.viewModel,
+    this.itemAnimation,
+    this.flipAnimation,
+  }) : super(key: key);
+
+  @override
+  _ExampleListTileState createState() => _ExampleListTileState();
+}
+
+class _ExampleListTileState extends State<ExampleListTile> {
+  Animation<double> _heightFactor;
+  Animation<double> _frontCardTransformation;
+  Animation<double> _backCardTransformation;
+
+  @override
+  void initState() {
+    super.initState();
+    _heightFactor = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: widget.itemAnimation,
+        curve: Interval(
+          0.550,
+          0.650,
+          curve: Curves.fastOutSlowIn,
+        ),
+      ),
+    );
+
+    _frontCardTransformation = Tween(begin: 0.0, end: pi / 2).animate(
+        // (pi / 2) * 4
+        CurvedAnimation(
+            parent: widget.flipAnimation,
+            curve: Interval(0.0, 0.5, curve: Curves.easeOut)));
+
+    _backCardTransformation = Tween(begin: 3.0, end: 0.0).animate(
+        CurvedAnimation(
+            parent: widget.flipAnimation,
+            curve: Interval(0.3, 1.0, curve: Curves.easeOut)));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _heightFactor,
+      builder: (BuildContext context, Widget child) {
+        return ClipRect(
+          child: Align(
+            alignment: Alignment.topLeft,
+            heightFactor: max(_heightFactor.value, 0.0),
+            widthFactor: 1.0,
+            child: GestureDetector(
+              onTap: widget.viewModel.onTap,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Stack(
+                  children: <Widget>[
+                    _BackCard(
+                      animation: _backCardTransformation,
+                      viewModel: widget.viewModel,
+                    ),
+                    _FrontCard(
+                      animation: _frontCardTransformation,
+                      viewModel: widget.viewModel,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _BackCard extends StatelessWidget {
+  final Animation animation;
+  final ExampleViewModel viewModel;
+
+  const _BackCard({Key key, this.animation, this.viewModel}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final flipInherited = FlipInherited.of(context);
+
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (BuildContext context, Widget child) {
+        return Transform(
+            transform: Matrix4.identity()
+              ..setEntry(3, 2, 0.001)
+              ..rotateX(
+                  flipInherited.isFlipped ? animation.value : -animation.value),
+            child: child);
+      },
+      child: Card(
+        elevation: !flipInherited.isFlipped ? 0.0 : 2.0,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16.0),
+          child: Text(viewModel.backTitle),
+        ),
+      ),
+    );
+  }
+}
+
+class _FrontCard extends StatelessWidget {
+  final Animation animation;
+  final ExampleViewModel viewModel;
+
+  const _FrontCard({Key key, this.animation, this.viewModel}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final flipInherited = FlipInherited.of(context);
+
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (BuildContext context, Widget child) {
+        return Transform(
+            transform: Matrix4.identity()
+              ..setEntry(3, 2, 0.001)
+              ..rotateX(
+                  flipInherited.isFlipped ? -animation.value : animation.value),
+            child: child);
+      },
+      child: Card(
+        elevation: flipInherited.isFlipped ? 0.0 : 2.0,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16.0),
+          child: Text(viewModel.title),
+        ),
+      ),
     );
   }
 }
