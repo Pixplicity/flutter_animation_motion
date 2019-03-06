@@ -22,7 +22,7 @@ Companion app for my "Animation and motion in Flutter" presentation, showcasing 
 
 ## Additional examples
 - Demonstration of custom explicit animations (change of decoration, opacity, width, height)
-- Staggered animation using a single `AnimationController` and multple `Interval` curves with different `Tween`s
+- Staggered animation using a single `AnimationController` and multiple `Interval` curves with different `Tween`s
 - Utilizing a custom `AnimationStatus` listener
 - Animating list item creation
 - Animating list items on demand, utilizing `Matrix` transformations
@@ -34,4 +34,4 @@ Long press anywhere in the app and swipe around.
 <img src="https://github.com/mrmitew/flutter_animation_motion/blob/master/design/demo.gif" width="300"/>
 
 ## Presentation
-_coming soon_
+Click [here](https://docs.google.com/presentation/d/12VtYACBXziIPAdUQSSBf85yzV8pB8zqJNq_Bhj1Lh9g/edit?usp=sharing).
